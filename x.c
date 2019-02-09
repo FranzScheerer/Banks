@@ -60,9 +60,9 @@ i3 sub(i3 a, i3 b){
 } 
 
 i3 shift(i3 a){
-   a.z0 <<= a.z0;
-   a.z1 <<= a.z1;
-   a.z2 <<= a.z2;
+   a.z0 <<= 1;
+   a.z1 <<= 1;
+   a.z2 <<= 1;
    if (a.z0 > MAX){
       a.z1++;
       a.z0 -= BASE;
