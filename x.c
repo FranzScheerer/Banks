@@ -9,7 +9,7 @@ typedef struct Z {
   uint64_t z1;
   uint64_t z2;
 } i3;
-
+ 
 int gt(i3 a, i3 b){
   if (a.z2 > b.z2) return 1;
   if (a.z1 > b.z1) return 1;
@@ -106,6 +106,11 @@ i3 div(i3 a, i3 b)
   i3 one;
   one.z0 = 1;
   one.z1 = one.z2 = 0;
+
+  if (b.z0 == 0 && b.z1 == 0 && b.z2 == 0){
+     fprintf(stderr,"ERROR division by zero\n");
+     return b;
+  }  
 
   res.z0 = res.z1 = res.z2 = 0;
   if ( gt(b,a) )
