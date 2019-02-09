@@ -82,8 +82,52 @@ i3 times(i3 a, i3 b){
         res = add(res, b);
      b = add(b,b);
   }
+  return res;
+}
+
+i3 shift(i3 a){
+   a.z0 <<= a.z0;
+   a.z1 <<= a.z1;
+   a.z2 <<= a.z2;
+   if (a.z0 > MAX){
+      a.z1++;
+      a.z0 -= BASE;
+   }  
+   if (a.z1 > MAX){
+      a.z2++;
+      a.z1 -= BASE;
+   }
+   return a;  
+}
+
+i3 div(i3 a, i3 b)
+{
+  i3 res, q, t, tt;
+  i3 one;
+  one.z0 = 1;
+  one.z1 = one.z2 = 0;
+
+  res.z0 = res.z1 = res.z2 = 0;
+  if ( gt(b,a) )
+     return res;
+  while ( ! gt(b,a) ){ 
+    t = b;
+    q = one;
+    while(1){
+       tt = shift(t);
+       if ( ! gt(tt, a)){ 
+         q = shift(q);
+         t = tt;
+       } else {
+         break;
+       }
+   };
+   a = sub(a, t);
+   res =  add(res, q);
+  }
+  return res;
 }
 
 int main(){
-  printf("Hello World\n");
+  printf("Hello World %d\n", 1<<17);
 }
