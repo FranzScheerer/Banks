@@ -21,7 +21,7 @@ i3 add(i3 a, i3 b){
   i3 res;
   res.z0 = res.z1 = res.z2 = 0;
   res.z0 = a.z0 + b.z0;
-  if (res.z1 > MAX) {
+  if (res.z0 > MAX) {
       res.z1 = 1;
       res.z0 = res.z0 % BASE;
   }
