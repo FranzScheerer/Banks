@@ -3,8 +3,7 @@
 #define MAX  0x7FFFFFFFFFFFFFFF
 #define BASE 0x8000000000000000
  
-typedef struct Z {
-  int v;
+typedef struct Z_ {
   uint64_t z0;
   uint64_t z1;
   uint64_t z2;
@@ -37,10 +36,8 @@ i3 add(i3 a, i3 b){
 i3 sub(i3 a, i3 b){
   i3 res;
   if (gt(b,a)){
-     res = a; 
-     a = b;
-     b = res;
-     res.v = 1;
+     fprintf(stderr, "ERROR Negative Number\n"); 
+     return a;
   }
   if (a.z0 < b.z0){
      res.z0 = BASE + a.z0 - b.z0;
@@ -62,29 +59,6 @@ i3 sub(i3 a, i3 b){
   return res;
 } 
 
-i3 times(i3 a, i3 b){
-  int bit;
-  i3 res;
-  res.z0 = res.z1 = res.z2 = 0;
-
-  for (bit = 0; bit < 63; bit++){
-     if ( a.z0 | (1 << bit) )
-        res = add(res, b);
-     b = add(b,b);
-  }
-  for (bit = 0; bit < 63; bit++){
-     if ( a.z1 | (1 << bit) )
-        res = add(res, b);
-     b = add(b,b);
-  }
-  for (bit = 0; bit < 63; bit++){
-     if ( a.z2 | (1 << bit) )
-        res = add(res, b);
-     b = add(b,b);
-  }
-  return res;
-}
-
 i3 shift(i3 a){
    a.z0 <<= a.z0;
    a.z1 <<= a.z1;
@@ -100,6 +74,29 @@ i3 shift(i3 a){
    return a;  
 }
 
+i3 times(i3 a, i3 b){
+  int bit;
+  i3 res;
+  res.z0 = res.z1 = res.z2 = 0;
+
+  for (bit = 0; bit < 63; bit++){
+     if ( a.z0 | (1 << bit) )
+        res = add(res, b);
+     b = shift(b);
+  }
+  for (bit = 0; bit < 63; bit++){
+     if ( a.z1 | (1 << bit) )
+        res = add(res, b);
+     b = shift(b);
+  }
+  for (bit = 0; bit < 63; bit++){
+     if ( a.z2 | (1 << bit) )
+        res = add(res, b);
+     b = shift(b);
+  }
+  return res;
+}
+
 i3 div(i3 a, i3 b)
 {
   i3 res, q, t, tt;
@@ -113,6 +110,7 @@ i3 div(i3 a, i3 b)
   }  
 
   res.z0 = res.z1 = res.z2 = 0;
+
   if ( gt(b,a) )
      return res;
   while ( ! gt(b,a) ){ 
@@ -120,7 +118,7 @@ i3 div(i3 a, i3 b)
     q = one;
     while(1){
        tt = shift(t);
-       if ( ! gt(tt, a)){ 
+       if (! gt(tt, a)){ 
          q = shift(q);
          t = tt;
        } else {
