@@ -80,17 +80,17 @@ i3 times(i3 a, i3 b){
   res.z0 = res.z1 = res.z2 = 0;
 
   for (bit = 0; bit < 63; bit++){
-     if ( a.z0 | (1 << bit) )
+     if ( (a.z0) & (1 << bit) )
         res = add(res, b);
      b = shift(b);
   }
   for (bit = 0; bit < 63; bit++){
-     if ( a.z1 | (1 << bit) )
+     if ( (a.z1) & (1 << bit) )
         res = add(res, b);
      b = shift(b);
   }
   for (bit = 0; bit < 63; bit++){
-     if ( a.z2 | (1 << bit) )
+     if ( (a.z2) & (1 << bit) )
         res = add(res, b);
      b = shift(b);
   }
