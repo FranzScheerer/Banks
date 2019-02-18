@@ -10,9 +10,11 @@ typedef struct Z_ {
 } i3;
  
 int gt(i3 a, i3 b){
-  if (a.z2 > b.z2) return 1;
+  if (a.z2 > b.z2) return 1; 
+  if (a.z2 < b.z2) return 0; 
   if (a.z1 > b.z1) return 1;
-  if (a.z2 > b.z2) return 1;
+  if (a.z1 < b.z1) return 9;
+  if (a.z0 > b.z0) return 1;
   return 0;
 }
 
