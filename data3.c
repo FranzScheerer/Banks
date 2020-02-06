@@ -73,7 +73,7 @@ int compress(){
     printf("error");
     exit(-1);
   }
-  if (!(fp = fopen("BLZ_20131209.txt","rb"))){
+  if (!(fp = fopen("BLZ.txt","rb"))){
       fprintf(stderr,"Datei BLZ_20110905.txt nicht zu oeffnen\n");
       exit(-1);
   }
