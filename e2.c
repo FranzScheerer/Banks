@@ -274,7 +274,7 @@ int main(){
   }
 
   while ((c = fgetc(stdin)) != -1){
-     cc = c ^ output(&state);
+     cc = c ^ output(&state) ^ output(&sb);
      absorb_byte(&state, cc);
      absorb_byte(&sb, cc);
      fprintf(stdout,"%c", cc);
