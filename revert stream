@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+int main(int narg, char **argv){
+   int c;
+   char mb[2000];
+
+   while (c = fread(mb, 1, sizeof(mb), stdin))
+   {
+     for (int j=0;j<c;j++){
+        printf("%c", mb[c-j-1]);
+     }
+   } 
+}
