@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>My Heading</h2>
+<script src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
+
+<p>Play around with the code and click on the "Run" button to view the result.</p>
+
+<p id="demo">Eine Demo!</p>
+
+<script>
+var a = 0, i = 0, j = 0, w = 1, s = [256], out = [32];
+
+function hex2(x){
+  var res = ''
+  if (x/16 < 10) 
+     res = res + String.fromCharCode(x/16 + '0'.charCodeAt(0));
+  else
+     res = res + String.fromCharCode(x/16 + 'A'.charCodeAt(0) - 10);
+  if (x % 16 < 10) 
+     res = res + String.fromCharCode(x%16 + '0'.charCodeAt(0));
+  else
+     res = res + String.fromCharCode(x%16 + 'A'.charCodeAt(0) - 10);
+  return res;   
+}
+
+function init()
+{
+    a = i = j = 0
+    w = 1
+    for (var v = 0; v < 256; v++) 
+        s[v] = v;
+}
+
+function update()
+{
+    i = (i + w) % 256
+    j = s[(j + s[i]) % 256]
+    tmp = s[i]
+    s[i] = s[j]
+    s[j] = tmp
+}
+
+function shuffle()
+{
+    for (v = 0; v < 256; v++) 
+        update()
+    w = (w + 2) % 256
+    a = 0
+}
+
+function absorb_nibble(x)
+{
+    if (a == 63)
+       shuffle()
+    tmp = s[a]
+    s[a] = s[240 + x]
+    s[240 + x] = tmp
+    a = a + 1
+}
+
+function absorb_byte(b)
+{
+    absorb_nibble(b % 16)
+    absorb_nibble(Math.floor(b / 16))
+}
+
+function output()
+{
+    update()
+    return s[j]
+}
+
+function h(x)
+{
+    init()
+    out = bigInt(0)
+    for (var ii = 0; ii < x.length; ii++ )
+        absorb_byte(x.charCodeAt(ii))
+    
+    shuffle()
+    shuffle()
+    shuffle()
+    for (v = 0; v < 32; v++) 
+        out = out.times(256).add(output())
+    return out.toString(32)    
+}
+
+
+var hash = document.getElementById("demo").innerHTML
+
+
+document.getElementById("demo").innerHTML = "JavaScript! hash = " + h(hash)
+</script>
